@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
-import { loginUser } from "../services/apiAuth";
+import { loginUser, registerUser } from "../services/apiAuth";
 import { useNavigate } from "react-router-dom";
 import { LocalStorage } from "../utils";
 const AuthContext = createContext();
@@ -54,7 +54,30 @@ function AuthProvider({ children }) {
       email: data.result.email,
       avatar: data.result.photo
         ? // eslint-disable-next-line no-undef
-          `${process.env.REACT_APP_API_URL}/images/users/${data.result.photo}`
+          data.result.photo
+        : "https://i.pravatar.cc/150?img=2",
+      role: data.result.role,
+    };
+    const token = data.result.token;
+    LocalStorage.set("user", user);
+    LocalStorage.set("token", token);
+    dispatch({
+      type: "LOGIN",
+      payload: {
+        user: user,
+        token: token,
+      },
+    });
+  }
+
+  async function register(name,email, password, confirmPassword) {
+    const data = await registerUser(name, email, password, confirmPassword);
+    const user = {
+      username: data.result.name,
+      email: data.result.email,
+      avatar: data.result.photo
+        ? // eslint-disable-next-line no-undef
+          data.result.photo
         : "https://i.pravatar.cc/150?img=2",
       role: data.result.role,
     };
@@ -79,7 +102,7 @@ function AuthProvider({ children }) {
   }
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, token, login, logout }}
+      value={{ user, isAuthenticated, token, login, logout, register }}
     >
       {children}
     </AuthContext.Provider>
