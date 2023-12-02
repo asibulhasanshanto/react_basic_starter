@@ -85,6 +85,7 @@ const Login = () => {
                 name="email"
                 type="email"
                 autoComplete="email"
+                placeholder="Enter your email"
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -112,6 +113,7 @@ const Login = () => {
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
                   value={values.password}
                   onChange={handleChange}
                   onBlur={handleBlur}

@@ -36,7 +36,6 @@ const Register = () => {
             values.name,
             values.email,
             values.password,
-            values.confirmPassword,
           );
         } catch (err) {
           setError(err.message);
@@ -98,6 +97,7 @@ const Register = () => {
                 value={values.name}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                placeholder="Enter your name"
                 className="block w-full rounded-md border-0 py-1.5 text-secondary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-gray-800 dark:text-white dark:ring-white/5 sm:text-sm sm:leading-6"
               />
               {errors.name && touched.name ? (
@@ -118,6 +118,7 @@ const Register = () => {
                 name="email"
                 type="email"
                 autoComplete="email"
+                placeholder="Enter your email"
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -145,6 +146,7 @@ const Register = () => {
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
                   value={values.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -193,6 +195,7 @@ const Register = () => {
                   ref={confirmPasswordRef}
                   id="confirmPassword"
                   name="confirmPassword"
+                  placeholder="Confirm your password"
                   type={showConfirmPassword ? "text" : "password"}
                   value={values.confirmPassword}
                   onChange={handleChange}

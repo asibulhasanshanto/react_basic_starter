@@ -50,15 +50,17 @@ function AuthProvider({ children }) {
   async function login(email, password) {
     const data = await loginUser(email, password);
     const user = {
-      username: data.result.name,
-      email: data.result.email,
-      avatar: data.result.photo
+      username: data.name,
+      email: data.email,
+      avatar: data.photo
         ? // eslint-disable-next-line no-undef
-          data.result.photo
+          data.photo !== "default.jpeg"
+          ? data.photo
+          : "https://i.pravatar.cc/150?img=2"
         : "https://i.pravatar.cc/150?img=2",
-      role: data.result.role,
+      role: data.role,
     };
-    const token = data.result.token;
+    const token = data.token;
     LocalStorage.set("user", user);
     LocalStorage.set("token", token);
     dispatch({
@@ -70,18 +72,20 @@ function AuthProvider({ children }) {
     });
   }
 
-  async function register(name,email, password, confirmPassword) {
-    const data = await registerUser(name, email, password, confirmPassword);
+  async function register(name, email, password) {
+    const data = await registerUser(name, email, password);
     const user = {
-      username: data.result.name,
-      email: data.result.email,
-      avatar: data.result.photo
+      username: data.name,
+      email: data.email,
+      avatar: data.photo
         ? // eslint-disable-next-line no-undef
-          data.result.photo
+          data.photo !== "default.jpeg"
+          ? data.photo
+          : "https://i.pravatar.cc/150?img=2"
         : "https://i.pravatar.cc/150?img=2",
-      role: data.result.role,
+      role: data.role,
     };
-    const token = data.result.token;
+    const token = data.token;
     LocalStorage.set("user", user);
     LocalStorage.set("token", token);
     dispatch({
