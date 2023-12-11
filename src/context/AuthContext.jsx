@@ -98,7 +98,8 @@ function AuthProvider({ children }) {
   }
 
   function logout() {
-    LocalStorage.clear();
+    LocalStorage.remove('user');
+    LocalStorage.remove('token');
     dispatch({
       type: "LOGOUT",
     });
