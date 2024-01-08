@@ -1,11 +1,10 @@
 import { useEffect, useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "./../context/AuthContext";
 import { useFormik } from "formik";
 import Loading from "./../components/ui/Loading";
 import { loginSchema } from "../schemas";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline";
-import { UserIcon } from "@heroicons/react/24/outline";
 
 const initialValues = {
   email: "",
@@ -48,14 +47,13 @@ const Login = () => {
   return (
     <div className="flex h-screen min-h-full flex-1 flex-col justify-center bg-white px-6 py-12 dark:bg-bg_dark dark:text-white lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        {/* <img
-          className="mx-auto mt-10 h-60  w-60 rounded-full"
+        <img
+          className="mx-auto mt-10 h-60  w-60"
           src="https://i.pravatar.cc/240?img=2"
           alt="Your Company"
-        /> */}
-        <UserIcon className="mx-auto mt-10 h-40 w-40 rounded-full  bg-bg_secondary p-10 text-secondary dark:bg-bg_dark_secondary dark:text-white" />
+        />
 
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-secondary dark:text-white">
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-white">
           Sign in to your account
         </h2>
         {error && (
@@ -75,7 +73,7 @@ const Login = () => {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium leading-6 text-secondary dark:text-white"
+              className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
             >
               Email address
             </label>
@@ -85,11 +83,10 @@ const Login = () => {
                 name="email"
                 type="email"
                 autoComplete="email"
-                placeholder="Enter your email"
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                className="block w-full rounded-md border-0 py-1.5 text-secondary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-gray-800 dark:text-white dark:ring-white/5 sm:text-sm sm:leading-6"
+                className="focus:ring-primary block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset dark:bg-gray-800 dark:text-white dark:ring-white/5 sm:text-sm sm:leading-6"
               />
               {errors.email && touched.email ? (
                 <p className="text-sm text-red-500">{errors.email}</p>
@@ -101,10 +98,15 @@ const Login = () => {
             <div className="flex items-center justify-between">
               <label
                 htmlFor="password"
-                className="block text-sm font-medium leading-6 text-secondary dark:text-white"
+                className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
               >
                 Password
               </label>
+              <div className="text-sm">
+                <div className="text-primary hover:text-primary font-semibold">
+                  Forgot password?
+                </div>
+              </div>
             </div>
             <div className="mt-2">
               <div className="relative">
@@ -113,12 +115,11 @@ const Login = () => {
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
                   value={values.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   autoComplete="current-password"
-                  className=" block w-full rounded-md border-0 py-1.5 pr-14 text-secondary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-gray-800 dark:text-white dark:ring-white/5 sm:text-sm sm:leading-6"
+                  className=" focus:ring-primary block w-full rounded-md border-0 py-1.5 pr-14 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset dark:bg-gray-800 dark:text-white dark:ring-white/5 sm:text-sm sm:leading-6"
                 />
                 <div className="absolute bottom-0 right-0 top-0 flex items-center ">
                   <div
@@ -132,9 +133,9 @@ const Login = () => {
                     className="flex  h-full cursor-pointer items-center justify-center px-3"
                   >
                     {showPassword ? (
-                      <EyeIcon className="h-5 w-5 text-gray-400 hover:text-primary" />
+                      <EyeIcon className="hover:text-primary h-5 w-5 text-gray-400" />
                     ) : (
-                      <EyeSlashIcon className="h-5 w-5 text-gray-400 hover:text-primary" />
+                      <EyeSlashIcon className="hover:text-primary h-5 w-5 text-gray-400" />
                     )}
                   </div>
                 </div>
@@ -150,7 +151,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="flex w-full justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed  disabled:bg-secondary dark:disabled:bg-bg_dark_secondary"
+              className="bg-primary hover:bg-primary focus-visible:outline-primary disabled:bg-secondary flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2  disabled:cursor-not-allowed dark:disabled:bg-bg_dark_secondary"
             >
               {isLoading ? (
                 <>
@@ -163,13 +164,6 @@ const Login = () => {
             </button>
           </div>
         </form>
-
-        <div className="mt-2 flex text-sm">
-          <p className="text-secondary">Did not have an account?</p>
-          <Link to={"/register"} className="ml-2 font-bold text-primary">
-            sign Up
-          </Link>
-        </div>
       </div>
     </div>
   );

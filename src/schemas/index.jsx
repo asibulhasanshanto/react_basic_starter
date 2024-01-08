@@ -18,13 +18,3 @@ export const updatePasswordSchema = Yup.object({
     "Passwords must match",
   ),
 });
-
-export const registerSchema = Yup.object({
-  name: Yup.string().min(3).required("Please enter your name"),
-  email: Yup.string().email().required("Please enter your email"),
-  password: Yup.string().min(8).required("Please enter your password"),
-  confirmPassword: Yup.string().oneOf(
-    [Yup.ref("password"), null],
-    "Passwords must match",
-  ),
-});

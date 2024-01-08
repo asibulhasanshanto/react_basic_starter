@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
-import { loginUser, registerUser } from "../services/apiAuth";
+import { loginUser } from "../services/apiAuth";
 import { useNavigate } from "react-router-dom";
-import { LocalStorage } from "../utils";
 const AuthContext = createContext();
 const initialState = {
   user: null,
@@ -19,6 +18,7 @@ function reducer(state, action) {
         isAuthenticated: true,
       };
     case "LOGOUT":
+      localStorage.removeItem("user");
       return {
         ...state,
         user: null,
@@ -38,56 +38,29 @@ function AuthProvider({ children }) {
   );
   const navigate = useNavigate();
   useEffect(() => {
-    const user = LocalStorage.get("user");
-    const token = LocalStorage.get("token");
+    const user = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
     if (user) {
       dispatch({
         type: "LOGIN",
-        payload: { user: user, token },
+        payload: { user: JSON.parse(user), token },
       });
     }
   }, []);
   async function login(email, password) {
     const data = await loginUser(email, password);
     const user = {
-      username: data.name,
-      email: data.email,
-      avatar: data.photo
-        ? // eslint-disable-next-line no-undef
-          data.photo !== "default.jpeg"
-          ? data.photo
-          : "https://i.pravatar.cc/150?img=2"
-        : "https://i.pravatar.cc/150?img=2",
-      role: data.role,
+      username: data.result.name,
+      email: data.result.email,
+      avatar:
+        data.result.photo
+          // eslint-disable-next-line no-undef
+          ? `${process.env.REACT_APP_API_URL}/images/users/${data.result.photo}`:"https://i.pravatar.cc/150?img=2",
+      role: data.result.role,
     };
-    const token = data.token;
-    LocalStorage.set("user", user);
-    LocalStorage.set("token", token);
-    dispatch({
-      type: "LOGIN",
-      payload: {
-        user: user,
-        token: token,
-      },
-    });
-  }
-
-  async function register(name, email, password) {
-    const data = await registerUser(name, email, password);
-    const user = {
-      username: data.name,
-      email: data.email,
-      avatar: data.photo
-        ? // eslint-disable-next-line no-undef
-          data.photo !== "default.jpeg"
-          ? data.photo
-          : "https://i.pravatar.cc/150?img=2"
-        : "https://i.pravatar.cc/150?img=2",
-      role: data.role,
-    };
-    const token = data.token;
-    LocalStorage.set("user", user);
-    LocalStorage.set("token", token);
+    const token = data.result.token;
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", token);
     dispatch({
       type: "LOGIN",
       payload: {
@@ -98,8 +71,6 @@ function AuthProvider({ children }) {
   }
 
   function logout() {
-    LocalStorage.remove('user');
-    LocalStorage.remove('token');
     dispatch({
       type: "LOGOUT",
     });
@@ -107,7 +78,7 @@ function AuthProvider({ children }) {
   }
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, token, login, logout, register }}
+      value={{ user, isAuthenticated, token, login, logout }}
     >
       {children}
     </AuthContext.Provider>
